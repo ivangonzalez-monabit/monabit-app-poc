@@ -140,7 +140,7 @@ function parseArgs(argv) {
 function trackWrite(relativePath) {
   const absolutePath = path.join(REPO_ROOT, relativePath);
 
-  if (!fs.existsSync(absolutePath)) {
+  if (!fs.existsSync(absolutePath) && !state.createdPaths.includes(relativePath)) {
     state.createdPaths.push(relativePath);
   }
 
@@ -230,10 +230,10 @@ async function downloadAssets(config) {
 }
 
 function copyDownloadedAsset(sourcePath, relativeTargetPath) {
+  trackWrite(relativeTargetPath);
   const targetPath = path.join(REPO_ROOT, relativeTargetPath);
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
   fs.copyFileSync(sourcePath, targetPath);
-  trackWrite(relativeTargetPath);
 }
 
 function applyAppJson(config) {
@@ -257,8 +257,8 @@ function applyAppJson(config) {
     splashPlugin[1].imageWidth = config.splash.image.width;
   }
 
-  fs.writeFileSync(absolutePath, `${JSON.stringify(appJson, null, 2)}\n`);
   trackWrite(relativePath);
+  fs.writeFileSync(absolutePath, `${JSON.stringify(appJson, null, 2)}\n`);
 }
 
 function applyBrandFont(config) {
@@ -271,8 +271,8 @@ export const brandFontSources = {
 };
 `;
 
-  fs.writeFileSync(absolutePath, contents);
   trackWrite(relativePath);
+  fs.writeFileSync(absolutePath, contents);
 }
 
 function applyBrandConfig(config) {
@@ -317,8 +317,8 @@ export const brandConfig: BrandConfig = {
 };
 `;
 
-  fs.writeFileSync(absolutePath, contents);
   trackWrite(relativePath);
+  fs.writeFileSync(absolutePath, contents);
 }
 
 function applyRepoChanges(config, downloadedFiles) {
@@ -423,7 +423,11 @@ function cleanup() {
     runGit(['checkout', '--', ...trackedTouchedPaths]);
   }
 
-  for (const relativePath of state.createdPaths) {
+  const untrackedPaths = [
+    ...new Set([...state.createdPaths, ...state.touchedPaths.filter((relativePath) => !isTrackedByGit(relativePath))]),
+  ];
+
+  for (const relativePath of untrackedPaths) {
     const absolutePath = path.join(REPO_ROOT, relativePath);
     if (fs.existsSync(absolutePath)) {
       fs.rmSync(absolutePath, { force: true });

@@ -58,7 +58,7 @@ node build-scripts/build-client.js --slug banco-union --platform android --confi
    - Android: `npx expo run:android --variant release`
    - iOS: `npx expo run:ios --configuration Release --no-bundler`
 8. Copia el artefacto a `dist/<slug>-<timestamp>.apk` o `dist/<slug>-<timestamp>.app`
-9. Revierte solo los archivos que tocó, borra `android/`/`ios/` y carpetas temporales
+9. Revierte archivos trackeados que tocó, **borra** los que creó y no están en git (ej. `assets/images/logo.png`), borra `android/`/`ios/` y carpetas temporales
 10. Verifica que `git status` vuelva a estar limpio
 
 ## Salida
