@@ -7,6 +7,7 @@ export const clientsBySlug = {
     scheme: 'banco-union',
     appName: 'Banco Unión',
     packageName: 'com.bancounion.app',
+    bundleIdentifier: 'com.bancounion.app',
     splash: {
       backgroundColor: '#1495E0',
       imageWidth: 80,
@@ -29,6 +30,7 @@ export const clientsBySlug = {
     scheme: 'banco-aurelia',
     appName: 'Banco Aurelia',
     packageName: 'com.bancoaurelia.app',
+    bundleIdentifier: 'com.bancoaurelia.app',
     splash: {
       backgroundColor: '#0C3D4C',
       imageWidth: 76,

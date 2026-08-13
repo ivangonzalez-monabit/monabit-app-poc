@@ -36,6 +36,7 @@ function buildClientConfig(slug, client) {
     scheme: client.scheme,
     appName: client.appName,
     packageName: client.packageName,
+    bundleIdentifier: client.bundleIdentifier,
     icon: {
       url: assetUrl(slug, paths.icon),
     },

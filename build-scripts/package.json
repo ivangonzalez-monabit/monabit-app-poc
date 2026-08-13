@@ -2,5 +2,5 @@
   "name": "monabit-build-scripts",
   "private": true,
   "type": "module",
-  "description": "Local multibrand Android build pipeline (POC)"
+  "description": "Local multibrand Android/iOS build pipeline (POC)"
 }

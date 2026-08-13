@@ -19,7 +19,7 @@ npm run start             # 0.0.0.0:4000
 GET /config/:slug
 ```
 
-| Slug            | App           | Scheme          | Package                |
+| Slug            | App           | Scheme          | Package / Bundle ID    |
 | --------------- | ------------- | --------------- | ---------------------- |
 | `banco-union`   | Banco Unión   | `banco-union`   | `com.bancounion.app`   |
 | `banco-aurelia` | Banco Aurelia | `banco-aurelia` | `com.bancoaurelia.app` |
@@ -36,6 +36,7 @@ curl -s http://localhost:4000/config/banco-aurelia | jq
   "scheme": "banco-aurelia",
   "appName": "Banco Aurelia",
   "packageName": "com.bancoaurelia.app",
+  "bundleIdentifier": "com.bancoaurelia.app",
   "icon": { "url": "http://localhost:4000/assets/banco-aurelia/icon.png" },
   "splash": {
     "backgroundColor": "#0C3D4C",
@@ -72,7 +73,7 @@ Detalle en [ASSETS.md](./ASSETS.md).
 | `HOST`     | `0.0.0.0`               |
 | `BASE_URL` | `http://localhost:4000` |
 
-## Android (fase 2)
+## Android / iOS (fase 2)
 
 Desde emulador Android, usa `10.0.2.2` en lugar de `localhost`:
 `http://10.0.2.2:4000/config/banco-aurelia`

@@ -1,14 +1,15 @@
 # Build Scripts
 
-Scripts locales para simular el pipeline multimarca (fase 2): fetch de config, personalización, prebuild Android, APK release e instalación en emulador.
+Scripts locales para simular el pipeline multimarca: fetch de config, personalización, prebuild, binario Release e instalación en emulador/simulador.
 
 ## Requisitos
 
 - Node.js 18+
 - Git working tree **limpio** (sin cambios sin commitear)
 - Backend mock corriendo (`mock-config-server/`)
-- Emulador Android **ya abierto**
 - Dependencias del repo instaladas (`npm install` en la raíz)
+- **Android:** emulador ya abierto
+- **iOS:** macOS, Xcode y un Simulator ya abierto
 
 ## Uso
 
@@ -19,20 +20,26 @@ cd mock-config-server
 npm run start
 ```
 
-2. Desde la raíz del repo, con el emulador Android abierto:
+2. Desde la raíz del repo:
 
 ```bash
-node build-scripts/build-client.js --slug banco-aurelia
+# Android (default)
+node build-scripts/build-client.js --slug banco-aurelia --platform android
+
+# iOS Simulator, configuración Release (sin Metro)
+node build-scripts/build-client.js --slug banco-aurelia --platform ios
 ```
 
 Otros slugs disponibles: `banco-union`.
+
+Si omitís `--platform`, usa `android`.
 
 ### URL del backend
 
 Por defecto usa `http://localhost:4000`. Para cambiarla:
 
 ```bash
-node build-scripts/build-client.js --slug banco-union --config-url http://10.0.2.2:4000
+node build-scripts/build-client.js --slug banco-union --platform android --config-url http://10.0.2.2:4000
 ```
 
 ## Qué hace el script
@@ -45,29 +52,29 @@ node build-scripts/build-client.js --slug banco-union --config-url http://10.0.2
    - `assets/images/splash-icon.png`
    - `assets/images/logo.png`
    - `assets/fonts/font.ttf`
-5. Actualiza `app.json` (`name`, `slug`, `scheme`, `android.package`, splash plugin) y `brand.config.ts` / `brand-font.ts`
-6. `npx expo prebuild --clean --platform android`
-7. `npx expo run:android --variant release`
-8. Copia el APK a `dist/<slug>-<timestamp>.apk`
-9. Revierte solo los archivos que tocó, borra `android/`/`ios/` y la carpeta temporal
+5. Actualiza `app.json` (`name`, `slug`, `scheme`, `android.package`, `ios.bundleIdentifier`, ícono iOS, splash plugin) y `brand.config.ts` / `brand-font.ts`
+6. `npx expo prebuild --clean --platform <android|ios>`
+7. Compila Release e instala:
+   - Android: `npx expo run:android --variant release`
+   - iOS: `npx expo run:ios --configuration Release --no-bundler`
+8. Copia el artefacto a `dist/<slug>-<timestamp>.apk` o `dist/<slug>-<timestamp>.app`
+9. Revierte solo los archivos que tocó, borra `android/`/`ios/` y carpetas temporales
 10. Verifica que `git status` vuelva a estar limpio
 
 ## Salida
 
-- APK persistente en `./dist/` (ignorado por git)
-- Resumen en consola con slug, ruta del APK y confirmación de repo limpio
+- Artefacto persistente en `./dist/` (ignorado por git)
+- Resumen en consola con slug, plataforma, ruta del artefacto y confirmación de repo limpio
 
 ## Notas
 
-- Solo Android en esta POC (no iOS).
-- Si falla en cualquier paso, intenta limpiar lo modificado antes de salir.
 - El APK release esperado queda en `android/app/build/outputs/apk/release/app-release.apk` antes de copiarse a `dist/`.
-- Si ves `missing typography.font.url`, el mock server que corre en `:4000` es una versión vieja. Reinicialo desde `mock-config-server/` (`Ctrl+C` y `npm run start`). Podés verificar con:
+- El `.app` de iOS es el bundle del Simulator (Release, unsigned). No es un `.ipa` de App Store.
+- En iOS el script apunta `ios.icon` al PNG de cliente (`assets/images/icon.png`) para no quedarse con `assets/expo.icon` de MonaBit.
+- Si ves campos faltantes en el config (`scheme`, `bundleIdentifier`, `typography.font.url`), el mock server que corre en `:4000` es una versión vieja. Reinicialo desde `mock-config-server/` (`Ctrl+C` y `npm run start`).
 
 ```bash
-curl -s http://localhost:4000/config/banco-aurelia | jq '.typography'
+curl -s http://localhost:4000/config/banco-aurelia | jq '{slug, scheme, packageName, bundleIdentifier, typography}'
 ```
 
-Debe incluir `font.url` y `fontFamily: "BrandFont"`.
-
-Deep links por cliente usan el `scheme` del config (ej. `banco-aurelia://brand-guide`). Reiniciá el mock server después de actualizar el contrato.
+Deep links por cliente usan el `scheme` del config (ej. `banco-aurelia://brand-guide`).

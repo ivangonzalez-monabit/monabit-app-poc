@@ -10,6 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
 
 const DEFAULT_CONFIG_BASE_URL = 'http://localhost:4000';
+const SUPPORTED_PLATFORMS = ['android', 'ios'];
 const APK_SOURCE = path.join(REPO_ROOT, 'android/app/build/outputs/apk/release/app-release.apk');
 
 const TARGET_PATHS = {
@@ -22,8 +23,9 @@ const TARGET_PATHS = {
   font: 'assets/fonts/font.ttf',
 };
 
-/** @type {{ slug?: string, configBaseUrl: string, tmpDir?: string, touchedPaths: string[], createdPaths: string[] }} */
+/** @type {{ slug?: string, platform: 'android' | 'ios', configBaseUrl: string, tmpDir?: string, iosOutputDir?: string, touchedPaths: string[], createdPaths: string[] }} */
 const state = {
+  platform: 'android',
   configBaseUrl: DEFAULT_CONFIG_BASE_URL,
   touchedPaths: [],
   createdPaths: [],
@@ -104,11 +106,32 @@ function parseArgs(argv) {
 
     if (arg.startsWith('--config-url=')) {
       state.configBaseUrl = arg.slice('--config-url='.length);
+      continue;
+    }
+
+    if (arg === '--platform') {
+      state.platform = argv[index + 1];
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--platform=')) {
+      state.platform = arg.slice('--platform='.length);
     }
   }
 
   if (!slug) {
     throw new Error('Missing required argument: --slug <client-slug>');
+  }
+
+  if (!SUPPORTED_PLATFORMS.includes(state.platform)) {
+    throw new Error(
+      `Invalid --platform "${state.platform}". Use one of: ${SUPPORTED_PLATFORMS.join(', ')}`,
+    );
+  }
+
+  if (state.platform === 'ios' && process.platform !== 'darwin') {
+    throw new Error('iOS builds require macOS with Xcode and a booted Simulator.');
   }
 
   state.slug = slug;
@@ -155,6 +178,7 @@ function validateConfig(config) {
   if (!config?.scheme) missing.push('scheme');
   if (!config?.appName) missing.push('appName');
   if (!config?.packageName) missing.push('packageName');
+  if (!config?.bundleIdentifier) missing.push('bundleIdentifier');
   if (!config?.typography?.fontFamily) missing.push('typography.fontFamily');
   if (!config?.featureFlags) missing.push('featureFlags');
 
@@ -221,6 +245,8 @@ function applyAppJson(config) {
   appJson.expo.slug = config.slug;
   appJson.expo.scheme = config.scheme;
   appJson.expo.android.package = config.packageName;
+  appJson.expo.ios.bundleIdentifier = config.bundleIdentifier;
+  appJson.expo.ios.icon = './assets/images/icon.png';
 
   const splashPlugin = appJson.expo.plugins.find(
     (plugin) => Array.isArray(plugin) && plugin[0] === 'expo-splash-screen',
@@ -307,25 +333,76 @@ function applyRepoChanges(config, downloadedFiles) {
 }
 
 function runPrebuild() {
-  run('npx', ['expo', 'prebuild', '--clean', '--platform', 'android']);
+  run('npx', ['expo', 'prebuild', '--clean', '--platform', state.platform]);
 }
 
 function runReleaseBuild() {
+  if (state.platform === 'ios') {
+    state.iosOutputDir = path.join(REPO_ROOT, 'dist', '.ios-output');
+    fs.rmSync(state.iosOutputDir, { recursive: true, force: true });
+    fs.mkdirSync(state.iosOutputDir, { recursive: true });
+    run('npx', [
+      'expo',
+      'run:ios',
+      '--configuration',
+      'Release',
+      '--no-bundler',
+      '--output',
+      state.iosOutputDir,
+    ]);
+    return;
+  }
+
   run('npx', ['expo', 'run:android', '--variant', 'release']);
 }
 
-function copyReleaseApk(slug) {
+function findIosAppBundle(directoryPath) {
+  if (!fs.existsSync(directoryPath)) {
+    return null;
+  }
+
+  const entries = fs.readdirSync(directoryPath, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const entryPath = path.join(directoryPath, entry.name);
+
+    if (entry.isDirectory() && entry.name.endsWith('.app')) {
+      return entryPath;
+    }
+
+    if (entry.isDirectory()) {
+      const nestedApp = findIosAppBundle(entryPath);
+      if (nestedApp) {
+        return nestedApp;
+      }
+    }
+  }
+
+  return null;
+}
+
+function copyReleaseArtifact(slug) {
+  const distDir = path.join(REPO_ROOT, 'dist');
+  fs.mkdirSync(distDir, { recursive: true });
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+
+  if (state.platform === 'ios') {
+    const appSource = findIosAppBundle(state.iosOutputDir);
+    if (!appSource) {
+      throw new Error(`Release .app not found in ${state.iosOutputDir}`);
+    }
+
+    const destinationPath = path.join(distDir, `${slug}-${timestamp}.app`);
+    fs.cpSync(appSource, destinationPath, { recursive: true });
+    return destinationPath;
+  }
+
   if (!fs.existsSync(APK_SOURCE)) {
     throw new Error(`Release APK not found at ${APK_SOURCE}`);
   }
 
-  const distDir = path.join(REPO_ROOT, 'dist');
-  fs.mkdirSync(distDir, { recursive: true });
-
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const destinationPath = path.join(distDir, `${slug}-${timestamp}.apk`);
   fs.copyFileSync(APK_SOURCE, destinationPath);
-
   return destinationPath;
 }
 
@@ -363,9 +440,13 @@ function cleanup() {
   if (state.tmpDir && fs.existsSync(state.tmpDir)) {
     fs.rmSync(state.tmpDir, { recursive: true, force: true });
   }
+
+  if (state.iosOutputDir && fs.existsSync(state.iosOutputDir)) {
+    fs.rmSync(state.iosOutputDir, { recursive: true, force: true });
+  }
 }
 
-function printFinalStatus(slug, apkPath) {
+function printFinalStatus(slug, artifactPath) {
   const result = spawnSync('git', ['status', '--porcelain'], {
     cwd: REPO_ROOT,
     encoding: 'utf8',
@@ -379,7 +460,8 @@ function printFinalStatus(slug, apkPath) {
 
   log('\nBuild summary');
   log(`- Client: ${slug}`);
-  log(`- APK: ${apkPath}`);
+  log(`- Platform: ${state.platform}`);
+  log(`- Artifact: ${artifactPath}`);
 
   if (dirtyOutput) {
     fail(
@@ -397,9 +479,9 @@ async function main() {
   const slug = state.slug;
 
   assertCleanGit('Pre-flight check');
-  log(`Starting local build for "${slug}"`);
+  log(`Starting local ${state.platform} build for "${slug}"`);
 
-  let apkPath;
+  let artifactPath;
 
   try {
     const config = await fetchConfig(slug);
@@ -407,7 +489,7 @@ async function main() {
     applyRepoChanges(config, downloadedFiles);
     runPrebuild();
     runReleaseBuild();
-    apkPath = copyReleaseApk(slug);
+    artifactPath = copyReleaseArtifact(slug);
   } catch (error) {
     fail(error instanceof Error ? error.message : String(error), 1);
 
@@ -424,7 +506,7 @@ async function main() {
 
   try {
     cleanup();
-    printFinalStatus(slug, apkPath);
+    printFinalStatus(slug, artifactPath);
   } catch (error) {
     fail(error instanceof Error ? error.message : String(error), 1);
   }
