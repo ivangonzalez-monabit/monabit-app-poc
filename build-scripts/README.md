@@ -62,3 +62,10 @@ node build-scripts/build-client.js --slug banco-union --config-url http://10.0.2
 - Solo Android en esta POC (no iOS).
 - Si falla en cualquier paso, intenta limpiar lo modificado antes de salir.
 - El APK release esperado queda en `android/app/build/outputs/apk/release/app-release.apk` antes de copiarse a `dist/`.
+- Si ves `missing typography.font.url`, el mock server que corre en `:4000` es una versión vieja. Reinicialo desde `mock-config-server/` (`Ctrl+C` y `npm run start`). Podés verificar con:
+
+```bash
+curl -s http://localhost:4000/config/banco-aurelia | jq '.typography'
+```
+
+Debe incluir `font.url` y `fontFamily: "BrandFont"`.

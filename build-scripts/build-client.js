@@ -138,7 +138,39 @@ async function fetchConfig(slug) {
     throw new Error(`Config fetch failed (${response.status}): ${body}`);
   }
 
-  return JSON.parse(body);
+  const config = JSON.parse(body);
+  validateConfig(config);
+  return config;
+}
+
+function validateConfig(config) {
+  /** @type {string[]} */
+  const missing = [];
+
+  if (!config?.icon?.url) missing.push('icon.url');
+  if (!config?.splash?.image?.url) missing.push('splash.image.url');
+  if (!config?.brand?.logo?.url) missing.push('brand.logo.url');
+  if (!config?.typography?.font?.url) missing.push('typography.font.url');
+  if (!config?.appName) missing.push('appName');
+  if (!config?.packageName) missing.push('packageName');
+  if (!config?.typography?.fontFamily) missing.push('typography.fontFamily');
+  if (!config?.featureFlags) missing.push('featureFlags');
+
+  if (missing.length > 0) {
+    throw new Error(
+      `Invalid config response: missing ${missing.join(', ')}. ` +
+        'Restart mock-config-server so it returns the current contract (including typography.font.url).',
+    );
+  }
+}
+
+function getAssetDownloads(config) {
+  return [
+    { url: config.icon.url, filename: 'icon.png' },
+    { url: config.splash.image.url, filename: 'splash.png' },
+    { url: config.brand.logo.url, filename: 'logo.png' },
+    { url: config.typography.font.url, filename: 'font.ttf' },
+  ];
 }
 
 async function downloadFile(url, destinationPath) {
@@ -157,12 +189,7 @@ async function downloadAssets(config) {
   state.tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'monabit-build-'));
   log(`Downloading assets to ${state.tmpDir}`);
 
-  const downloads = [
-    { url: config.icon.url, filename: 'icon.png' },
-    { url: config.splash.image.url, filename: 'splash.png' },
-    { url: config.brand.logo.url, filename: 'logo.png' },
-    { url: config.typography.font.url, filename: 'font.ttf' },
-  ];
+  const downloads = getAssetDownloads(config);
 
   /** @type {Record<string, string>} */
   const files = {};
