@@ -3,13 +3,15 @@ import { Pressable, ScrollView, StyleSheet, TextInput, useColorScheme } from 're
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useSecureStorageTest } from '@/features/secure-storage-test/model/use-secure-storage-test';
+import { useTheme } from '@/shared/lib/hooks/use-theme';
 import { ThemedText } from '@/shared/ui/themed-text';
 import { ThemedView } from '@/shared/ui/themed-view';
 import { BottomTabInset, Colors, Spacing } from '@/shared/ui/theme';
 
 export function SecureStorageTestScreen() {
   const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme === 'dark' ? 'dark' : 'light'];
+  const colors = Colors[colorScheme === 'dark' ? 'dark' : 'light'];
+  const theme = useTheme();
   const { saveTestToken, readTestToken, value, error, isLoading } = useSecureStorageTest();
   const [inputValue, setInputValue] = useState('');
 
@@ -28,13 +30,14 @@ export function SecureStorageTestScreen() {
             value={inputValue}
             onChangeText={setInputValue}
             placeholder="Valor personalizado (opcional)"
-            placeholderTextColor={theme.textSecondary}
+            placeholderTextColor={colors.textSecondary}
             style={[
               styles.input,
               {
-                color: theme.text,
-                borderColor: theme.backgroundSelected,
-                backgroundColor: theme.backgroundElement,
+                color: colors.text,
+                borderColor: colors.backgroundSelected,
+                backgroundColor: colors.backgroundElement,
+                fontFamily: theme.fontFamily,
               },
             ]}
           />

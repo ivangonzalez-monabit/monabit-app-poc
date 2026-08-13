@@ -18,6 +18,37 @@
     "plugins": [
       "expo-router",
       [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/font.ttf"],
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "BrandFont",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/font.ttf",
+                    "weight": 400
+                  },
+                  {
+                    "path": "./assets/fonts/font.ttf",
+                    "weight": 500
+                  },
+                  {
+                    "path": "./assets/fonts/font.ttf",
+                    "weight": 600
+                  },
+                  {
+                    "path": "./assets/fonts/font.ttf",
+                    "weight": 700
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#208AEF",

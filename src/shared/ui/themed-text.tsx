@@ -10,11 +10,12 @@ export type ThemedTextProps = TextProps & {
 
 export function ThemedText({ style, type = 'default', themeColor, ...rest }: ThemedTextProps) {
   const theme = useTheme();
+  const isCode = type === 'code';
 
   return (
     <Text
       style={[
-        { color: theme[themeColor ?? 'text'], fontFamily: theme.fontFamily },
+        { color: theme[themeColor ?? 'text'] },
         type === 'default' && styles.default,
         type === 'title' && styles.title,
         type === 'small' && styles.small,
@@ -24,6 +25,12 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
         type === 'linkPrimary' && styles.linkPrimary,
         type === 'code' && styles.code,
         style,
+        !isCode && {
+          fontFamily: theme.fontFamily,
+          // Android looks up a weight-specific file (BrandFont-Bold). A single TTF
+          // would fall back to the system font unless weight is reset.
+          ...(Platform.OS === 'android' ? { fontWeight: 'normal' as const } : null),
+        },
       ]}
       {...rest}
     />

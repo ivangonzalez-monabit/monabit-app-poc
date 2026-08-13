@@ -8,14 +8,17 @@ import { FeatureFlagsProvider } from '@/_app/providers/feature-flags-provider';
 import { QueryProvider } from '@/_app/providers/query-provider';
 import { ThemeProvider } from '@/_app/providers/theme-provider';
 import { useFeatureFlags } from '@/shared/lib/hooks/use-feature-flags';
+import { useTheme } from '@/shared/lib/hooks/use-theme';
 
 SplashScreen.preventAutoHideAsync();
 
 function AppTabs() {
   const { documentCapture } = useFeatureFlags();
+  const theme = useTheme();
+  const tabLabelStyle = { fontFamily: theme.fontFamily };
 
   return (
-    <NativeTabs>
+    <NativeTabs labelStyle={tabLabelStyle}>
       <NativeTabs.Trigger name="(home)">
         <NativeTabs.Trigger.Icon sf="house.fill" md="home" />
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
