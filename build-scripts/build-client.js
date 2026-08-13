@@ -154,7 +154,7 @@ async function downloadFile(url, destinationPath) {
 }
 
 async function downloadAssets(config) {
-  state.tmpDir = fs.mkdtemp(path.join(os.tmpdir(), 'monabit-build-'));
+  state.tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'monabit-build-'));
   log(`Downloading assets to ${state.tmpDir}`);
 
   const downloads = [
