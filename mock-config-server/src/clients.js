@@ -17,7 +17,7 @@ export const clientsBySlug = {
       text: '#1A1A1A',
     },
     typography: {
-      fontFamily: 'Inter',
+      fontFamily: 'BrandFont',
     },
     featureFlags: {
       documentCapture: true,
@@ -38,7 +38,7 @@ export const clientsBySlug = {
       text: '#0A1F26',
     },
     typography: {
-      fontFamily: 'Roboto',
+      fontFamily: 'BrandFont',
     },
     featureFlags: {
       documentCapture: false,
@@ -50,6 +50,7 @@ const defaultAssetPaths = {
   icon: 'icon.png',
   splash: 'splash.png',
   logo: 'logo.png',
+  font: 'font.ttf',
 };
 
 /** @type {Record<string, typeof defaultAssetPaths>} */

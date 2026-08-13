@@ -49,7 +49,12 @@ function buildClientConfig(slug, client) {
       logo: { url: assetUrl(slug, paths.logo) },
     },
     colors: client.colors,
-    typography: client.typography,
+    typography: {
+      fontFamily: client.typography.fontFamily,
+      font: {
+        url: assetUrl(slug, paths.font),
+      },
+    },
     featureFlags: client.featureFlags,
   };
 }

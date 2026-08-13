@@ -1,4 +1,6 @@
-import { type ImageSourcePropType, Platform } from 'react-native';
+import { type ImageSourcePropType } from 'react-native';
+
+import { brandFontFamily } from '@/_app/config/brand-font';
 
 export type BrandConfig = {
   name: string;
@@ -27,7 +29,7 @@ export const brandConfig: BrandConfig = {
     text: '#000000',
   },
   typography: {
-    fontFamily: Platform.select({ ios: 'System', default: 'sans-serif' }) ?? 'System',
+    fontFamily: brandFontFamily,
   },
   featureFlags: {
     documentCapture: true,

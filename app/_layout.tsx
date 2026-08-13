@@ -1,7 +1,9 @@
+import { useFonts } from 'expo-font';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
+import { brandFontSources } from '@/_app/config/brand-font';
 import { FeatureFlagsProvider } from '@/_app/providers/feature-flags-provider';
 import { QueryProvider } from '@/_app/providers/query-provider';
 import { ThemeProvider } from '@/_app/providers/theme-provider';
@@ -43,9 +45,17 @@ function AppTabs() {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts(brandFontSources);
+
   useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <ThemeProvider>

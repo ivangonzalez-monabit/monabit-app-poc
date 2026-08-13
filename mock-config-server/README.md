@@ -42,7 +42,10 @@ curl -s http://localhost:4000/config/banco-aurelia | jq
   },
   "brand": { "logo": { "url": ".../logo.png" } },
   "colors": { "primary": "#0C3D4C", "secondary": "#D4A017", "background": "#F5F9FA", "text": "#0A1F26" },
-  "typography": { "fontFamily": "Roboto" },
+  "typography": {
+    "fontFamily": "BrandFont",
+    "font": { "url": ".../font.ttf" }
+  },
   "featureFlags": { "documentCapture": false }
 }
 ```
@@ -55,6 +58,7 @@ curl -s http://localhost:4000/config/banco-aurelia | jq
 assets/{slug}/icon.png
 assets/{slug}/splash.png
 assets/{slug}/logo.png
+assets/{slug}/font.ttf
 ```
 
 Detalle en [ASSETS.md](./ASSETS.md).
