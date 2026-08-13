@@ -6,6 +6,7 @@
 /**
  * @typedef {Object} ClientConfigSeed
  * @property {string} slug
+ * @property {string} scheme
  * @property {string} appName
  * @property {string} packageName
  * @property {{ backgroundColor: string, imageWidth: number }} splash

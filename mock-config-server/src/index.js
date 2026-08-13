@@ -33,6 +33,7 @@ function buildClientConfig(slug, client) {
 
   return {
     slug: client.slug,
+    scheme: client.scheme,
     appName: client.appName,
     packageName: client.packageName,
     icon: {

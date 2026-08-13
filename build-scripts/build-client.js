@@ -151,6 +151,8 @@ function validateConfig(config) {
   if (!config?.splash?.image?.url) missing.push('splash.image.url');
   if (!config?.brand?.logo?.url) missing.push('brand.logo.url');
   if (!config?.typography?.font?.url) missing.push('typography.font.url');
+  if (!config?.slug) missing.push('slug');
+  if (!config?.scheme) missing.push('scheme');
   if (!config?.appName) missing.push('appName');
   if (!config?.packageName) missing.push('packageName');
   if (!config?.typography?.fontFamily) missing.push('typography.fontFamily');
@@ -216,6 +218,8 @@ function applyAppJson(config) {
   const appJson = JSON.parse(fs.readFileSync(absolutePath, 'utf8'));
 
   appJson.expo.name = config.appName;
+  appJson.expo.slug = config.slug;
+  appJson.expo.scheme = config.scheme;
   appJson.expo.android.package = config.packageName;
 
   const splashPlugin = appJson.expo.plugins.find(

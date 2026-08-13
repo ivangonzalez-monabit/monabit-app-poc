@@ -4,6 +4,7 @@
 export const clientsBySlug = {
   'banco-union': {
     slug: 'banco-union',
+    scheme: 'banco-union',
     appName: 'Banco Unión',
     packageName: 'com.bancounion.app',
     splash: {
@@ -25,6 +26,7 @@ export const clientsBySlug = {
   },
   'banco-aurelia': {
     slug: 'banco-aurelia',
+    scheme: 'banco-aurelia',
     appName: 'Banco Aurelia',
     packageName: 'com.bancoaurelia.app',
     splash: {

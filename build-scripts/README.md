@@ -45,7 +45,7 @@ node build-scripts/build-client.js --slug banco-union --config-url http://10.0.2
    - `assets/images/splash-icon.png`
    - `assets/images/logo.png`
    - `assets/fonts/font.ttf`
-5. Actualiza `app.json` (`name`, `android.package`, splash plugin) y `brand.config.ts` / `brand-font.ts`
+5. Actualiza `app.json` (`name`, `slug`, `scheme`, `android.package`, splash plugin) y `brand.config.ts` / `brand-font.ts`
 6. `npx expo prebuild --clean --platform android`
 7. `npx expo run:android --variant release`
 8. Copia el APK a `dist/<slug>-<timestamp>.apk`
@@ -69,3 +69,5 @@ curl -s http://localhost:4000/config/banco-aurelia | jq '.typography'
 ```
 
 Debe incluir `font.url` y `fontFamily: "BrandFont"`.
+
+Deep links por cliente usan el `scheme` del config (ej. `banco-aurelia://brand-guide`). Reiniciá el mock server después de actualizar el contrato.

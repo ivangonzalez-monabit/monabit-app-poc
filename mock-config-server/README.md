@@ -19,10 +19,10 @@ npm run start             # 0.0.0.0:4000
 GET /config/:slug
 ```
 
-| Slug            | App           | Package                |
-| --------------- | ------------- | ---------------------- |
-| `banco-union`   | Banco Unión   | `com.bancounion.app`   |
-| `banco-aurelia` | Banco Aurelia | `com.bancoaurelia.app` |
+| Slug            | App           | Scheme          | Package                |
+| --------------- | ------------- | --------------- | ---------------------- |
+| `banco-union`   | Banco Unión   | `banco-union`   | `com.bancounion.app`   |
+| `banco-aurelia` | Banco Aurelia | `banco-aurelia` | `com.bancoaurelia.app` |
 
 ```bash
 curl -s http://localhost:4000/config/banco-aurelia | jq
@@ -33,6 +33,7 @@ curl -s http://localhost:4000/config/banco-aurelia | jq
 ```json
 {
   "slug": "banco-aurelia",
+  "scheme": "banco-aurelia",
   "appName": "Banco Aurelia",
   "packageName": "com.bancoaurelia.app",
   "icon": { "url": "http://localhost:4000/assets/banco-aurelia/icon.png" },
