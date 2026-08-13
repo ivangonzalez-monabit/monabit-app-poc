@@ -1,44 +1,63 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+import { Link } from 'expo-router';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/shared/ui/themed-text';
 import { ThemedView } from '@/shared/ui/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/shared/ui/theme';
 
-function getDevMenuHint() {
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+const CAPABILITIES = [
+  {
+    href: '/biometric-auth' as const,
+    title: 'Biometría',
+    description: 'Face ID, Touch ID o huella',
+  },
+  {
+    href: '/location' as const,
+    title: 'Ubicación',
+    description: 'Latitud y longitud del dispositivo',
+  },
+  {
+    href: '/document-capture' as const,
+    title: 'Documentos',
+    description: 'Cámara y selector de archivos',
+  },
+  {
+    href: '/secure-storage' as const,
+    title: 'Secure Storage',
+    description: 'Escritura y lectura cifrada',
+  },
+] as const;
 
 export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <ThemedText type="title" style={styles.title}>
-            MonaBit
-          </ThemedText>
-          <ThemedText themeColor="textSecondary" style={styles.subtitle}>
-            Mobile wallet platform
-          </ThemedText>
-        </ThemedView>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <ThemedView style={styles.header}>
+            <ThemedText type="title" style={styles.title}>
+              MonaBit Foundation
+            </ThemedText>
+            <ThemedText themeColor="textSecondary" style={styles.subtitle}>
+              Capacidades nativas esenciales para validar el stack antes de producto.
+            </ThemedText>
+          </ThemedView>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <ThemedText type="smallBold">Dev tools</ThemedText>
-          {getDevMenuHint()}
-        </ThemedView>
+          <ThemedView style={styles.grid}>
+            {CAPABILITIES.map((capability) => (
+              <Link key={capability.href} href={capability.href} asChild>
+                <Pressable style={({ pressed }) => [pressed && styles.cardPressed]}>
+                  <ThemedView type="backgroundElement" style={styles.card}>
+                    <ThemedText type="smallBold">{capability.title}</ThemedText>
+                    <ThemedText type="small" themeColor="textSecondary">
+                      {capability.description}
+                    </ThemedText>
+                  </ThemedView>
+                </Pressable>
+              </Link>
+            ))}
+          </ThemedView>
+        </ScrollView>
       </SafeAreaView>
     </ThemedView>
   );
@@ -47,35 +66,38 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
   },
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
+  scrollContent: {
     paddingHorizontal: Spacing.four,
+    paddingTop: Spacing.four,
+    paddingBottom: BottomTabInset + Spacing.four,
+    gap: Spacing.four,
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  header: {
     gap: Spacing.two,
   },
   title: {
-    textAlign: 'center',
+    fontSize: 36,
+    lineHeight: 40,
   },
   subtitle: {
-    textAlign: 'center',
+    lineHeight: 22,
   },
-  stepContainer: {
-    gap: Spacing.two,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  grid: {
+    gap: Spacing.three,
+  },
+  card: {
+    borderRadius: Spacing.three,
+    padding: Spacing.four,
+    gap: Spacing.one,
+  },
+  cardPressed: {
+    opacity: 0.8,
   },
 });

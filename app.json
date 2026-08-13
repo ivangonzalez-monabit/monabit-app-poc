@@ -30,7 +30,27 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "MonaBit necesita Face ID para autenticación biométrica."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "MonaBit necesita tu ubicación para verificar la capacidad nativa."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "MonaBit necesita la cámara para capturar documentos.",
+          "photosPermission": "MonaBit necesita acceso a fotos para seleccionar documentos."
+        }
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

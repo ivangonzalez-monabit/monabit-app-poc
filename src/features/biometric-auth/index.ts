@@ -1,1 +1,1 @@
-// Public API for biometric-auth feature (to be implemented)
+export { BiometricAuthScreen } from './ui/biometric-auth-screen';
