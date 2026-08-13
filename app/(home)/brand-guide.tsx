@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { brandConfig } from '@/_app/config/brand.config';
@@ -67,21 +67,13 @@ export default function BrandGuideScreen() {
           <ThemedView style={styles.section}>
             <ThemedText type="smallBold">Tipografía</ThemedText>
             <ThemedView type="backgroundElement" style={styles.typographySample}>
-              <Text
-                style={[
-                  styles.typographyHeading,
-                  { fontFamily: theme.fontFamily, color: theme.text },
-                ]}>
+              <ThemedText style={styles.typographyHeading}>
                 Heading — {brandConfig.typography.fontFamily}
-              </Text>
-              <Text
-                style={[
-                  styles.typographyBody,
-                  { fontFamily: theme.fontFamily, color: theme.text },
-                ]}>
+              </ThemedText>
+              <ThemedText style={styles.typographyBody}>
                 Texto de cuerpo con la fuente de marca. MonaBit Foundation valida capacidades
                 nativas antes de producto.
-              </Text>
+              </ThemedText>
             </ThemedView>
           </ThemedView>
 

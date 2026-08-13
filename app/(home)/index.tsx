@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { Link, router } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { brandConfig } from '@/_app/config/brand.config';
@@ -77,7 +77,9 @@ export default function HomeScreen() {
               { backgroundColor: theme.primary, borderColor: theme.secondary },
               pressed && styles.cardPressed,
             ]}>
-            <Text style={styles.brandGuideButtonText}>Ver guía de marca</Text>
+            <ThemedText type="smallBold" style={styles.brandGuideButtonText}>
+              Ver guía de marca
+            </ThemedText>
           </Pressable>
 
           <ThemedView style={styles.grid}>
