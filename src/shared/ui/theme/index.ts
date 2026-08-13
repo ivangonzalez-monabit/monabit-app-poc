@@ -1,9 +1,16 @@
 /**
- * Theme tokens used by the design system.
- * Brand colors will be injected at build time via src/_app/config/brand.config.ts.
+ * Default/fallback theme tokens for the design system.
+ * Runtime brand values are injected via ThemeProvider from src/_app/config/brand.config.ts.
  */
 
 import { Platform } from 'react-native';
+
+export const DefaultBrandColors = {
+  primary: '#208AEF',
+  secondary: '#0274DF',
+  background: '#ffffff',
+  text: '#000000',
+} as const;
 
 export const Colors = {
   light: {
