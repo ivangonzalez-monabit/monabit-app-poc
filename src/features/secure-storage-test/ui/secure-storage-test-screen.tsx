@@ -16,17 +16,20 @@ export function SecureStorageTestScreen() {
   const [inputValue, setInputValue] = useState('');
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} testID="secure-storage-screen">
       <SafeAreaView style={styles.safeArea}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled">
-          <ThemedText type="subtitle">Secure Storage</ThemedText>
+          <ThemedText type="subtitle" testID="secure-storage-title">
+            Secure Storage
+          </ThemedText>
           <ThemedText themeColor="textSecondary" style={styles.description}>
             Prueba escritura y lectura cifrada con expo-secure-store.
           </ThemedText>
 
           <TextInput
+            testID="secure-storage-input"
             value={inputValue}
             onChangeText={setInputValue}
             placeholder="Valor personalizado (opcional)"
@@ -44,6 +47,7 @@ export function SecureStorageTestScreen() {
 
           <ThemedView style={styles.actions}>
             <Pressable
+              testID="secure-storage-save-button"
               style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
               onPress={() => saveTestToken(inputValue)}
               disabled={isLoading}>
@@ -53,6 +57,7 @@ export function SecureStorageTestScreen() {
             </Pressable>
 
             <Pressable
+              testID="secure-storage-read-button"
               style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
               onPress={readTestToken}
               disabled={isLoading}>
@@ -63,12 +68,16 @@ export function SecureStorageTestScreen() {
           </ThemedView>
 
           {value ? (
-            <ThemedView type="backgroundElement" style={styles.resultBox}>
+            <ThemedView type="backgroundElement" style={styles.resultBox} testID="secure-storage-result">
               <ThemedText type="code">{value}</ThemedText>
             </ThemedView>
           ) : null}
 
-          {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
+          {error ? (
+            <ThemedText style={styles.error} testID="secure-storage-error">
+              {error}
+            </ThemedText>
+          ) : null}
         </ScrollView>
       </SafeAreaView>
     </ThemedView>

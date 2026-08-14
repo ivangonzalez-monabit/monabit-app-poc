@@ -1,0 +1,16 @@
+# Maestro workspace configuration
+# App IDs (pass at runtime with -e APP_ID=...):
+#   Android: com.ivangonzalezmonabit.monabit
+#   iOS:     com.ivangonzalez-monabit.monabit
+# White-label builds override these (e.g. com.bancounion.app).
+
+flows:
+  - '*.yaml'
+
+testOutputDir: maestro-reports
+
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - 01_smoke_test
+    - 02_main_flow

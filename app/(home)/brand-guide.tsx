@@ -25,7 +25,7 @@ export default function BrandGuideScreen() {
   const featureFlags = useFeatureFlags();
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} testID="brand-guide-screen">
       <SafeAreaView style={styles.safeArea} edges={['bottom']}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <ThemedText themeColor="textSecondary" style={styles.description}>
@@ -45,7 +45,7 @@ export default function BrandGuideScreen() {
             </ThemedText>
           </ThemedView>
 
-          <ThemedView style={styles.section}>
+          <ThemedView style={styles.section} testID="brand-guide-colors">
             <ThemedText type="smallBold">Colores</ThemedText>
             <View style={styles.swatches}>
               {COLOR_SWATCHES.map(({ key, label }) => {

@@ -44,7 +44,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} testID="home-screen">
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <ThemedView style={styles.brandHeader}>
@@ -55,13 +55,13 @@ export default function HomeScreen() {
               ]}>
               <Image source={brandConfig.logo} style={styles.logo} contentFit="contain" />
             </View>
-            <ThemedText type="title" style={styles.brandName}>
+            <ThemedText type="title" style={styles.brandName} testID="home-brand-name">
               {brandConfig.name}
             </ThemedText>
           </ThemedView>
 
           <ThemedView style={styles.header}>
-            <ThemedText type="smallBold" style={styles.foundationTitle}>
+            <ThemedText type="smallBold" style={styles.foundationTitle} testID="home-foundation-title">
               Foundation
             </ThemedText>
             <ThemedText themeColor="textSecondary" style={styles.subtitle}>
@@ -70,6 +70,7 @@ export default function HomeScreen() {
           </ThemedView>
 
           <Pressable
+            testID="home-brand-guide-button"
             accessibilityRole="button"
             onPress={() => router.push('/brand-guide')}
             style={({ pressed }) => [
@@ -85,7 +86,9 @@ export default function HomeScreen() {
           <ThemedView style={styles.grid}>
             {capabilities.map((capability) => (
               <Link key={capability.href} href={capability.href} asChild>
-                <Pressable style={({ pressed }) => [pressed && styles.cardPressed]}>
+                <Pressable
+                  testID={`home-capability-${capability.href.replace('/', '')}`}
+                  style={({ pressed }) => [pressed && styles.cardPressed]}>
                   <ThemedView type="backgroundElement" style={styles.card}>
                     <ThemedText type="smallBold">{capability.title}</ThemedText>
                     <ThemedText type="small" themeColor="textSecondary">

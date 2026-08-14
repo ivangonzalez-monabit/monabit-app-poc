@@ -1,0 +1,84 @@
+appId: ${APP_ID}
+name: Main flow — brand guide and secure storage
+tags:
+  - main
+  - poc
+env:
+  APP_ID: ${APP_ID || 'com.ivangonzalezmonabit.monabit'}
+  RECORD_VIDEO: ${RECORD_VIDEO || 'false'}
+properties:
+  junitClassname: e2e.maestro.main
+  junitId: MAIN-001
+  suite: maestro-poc
+onFlowStart:
+  - runFlow:
+      when:
+        true: ${RECORD_VIDEO == 'true'}
+      commands:
+        - startRecording:
+            path: 02_main_flow
+            optional: true
+            label: Start screen recording
+onFlowComplete:
+  - runFlow:
+      when:
+        true: ${RECORD_VIDEO == 'true'}
+      commands:
+        - stopRecording
+---
+- launchApp:
+    appId: ${APP_ID}
+    clearState: true
+    label: Launch app with a clean state
+- waitForAnimationToEnd:
+    timeout: 8000
+- extendedWaitUntil:
+    visible: Foundation
+    timeout: 20000
+    label: Wait until Home (Foundation) is visible
+- tapOn: Ver guía de marca
+- extendedWaitUntil:
+    visible: Colores
+    timeout: 10000
+    label: Wait until brand guide color tokens are visible
+- assertVisible: Colores
+- takeScreenshot:
+    path: main-brand-guide
+    label: Capture brand guide evidence screenshot
+- tapOn:
+    text: Home
+    label: Return to Home via tab
+- extendedWaitUntil:
+    visible: Foundation
+    timeout: 10000
+    label: Confirm Home after leaving brand guide
+- tapOn:
+    text: Storage
+    label: Open Secure Storage via bottom tab
+- extendedWaitUntil:
+    visible: Guardar token de prueba
+    timeout: 10000
+    label: Wait until Secure Storage actions are visible
+- assertVisible: Secure Storage
+- tapOn: Valor personalizado (opcional)
+- inputText: maestro-e2e-token
+- hideKeyboard
+- tapOn: Guardar token de prueba
+- waitForAnimationToEnd:
+    timeout: 3000
+- extendedWaitUntil:
+    visible:
+      text: ".*Token de prueba guardado.*"
+    timeout: 15000
+    label: Wait for save confirmation (string includes leading ✅)
+- assertVisible:
+    text: ".*Token de prueba guardado.*"
+- tapOn: Leer token
+- extendedWaitUntil:
+    visible: maestro-e2e-token
+    timeout: 8000
+    label: Wait until stored value is shown
+- assertVisible: maestro-e2e-token
+- takeScreenshot:
+    path: main-secure-storage
+    label: Capture Secure Storage evidence screenshot

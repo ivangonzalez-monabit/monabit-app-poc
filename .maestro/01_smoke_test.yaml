@@ -1,0 +1,46 @@
+appId: ${APP_ID}
+name: Smoke — launch and home screen
+tags:
+  - smoke
+  - poc
+env:
+  APP_ID: ${APP_ID || 'com.ivangonzalezmonabit.monabit'}
+  RECORD_VIDEO: ${RECORD_VIDEO || 'false'}
+properties:
+  junitClassname: e2e.maestro.smoke
+  junitId: SMOKE-001
+  suite: maestro-poc
+onFlowStart:
+  - runFlow:
+      when:
+        true: ${RECORD_VIDEO == 'true'}
+      commands:
+        - startRecording:
+            path: 01_smoke_test
+            optional: true
+            label: Start screen recording
+onFlowComplete:
+  - runFlow:
+      when:
+        true: ${RECORD_VIDEO == 'true'}
+      commands:
+        - stopRecording
+---
+- launchApp:
+    appId: ${APP_ID}
+    clearState: true
+    label: Launch app with a clean state
+- waitForAnimationToEnd:
+    timeout: 8000
+- extendedWaitUntil:
+    visible: Foundation
+    timeout: 20000
+    label: Wait until Home (Foundation) is visible
+- assertVisible: Foundation
+- assertVisible: Ver guía de marca
+- assertVisible: Biometría
+- assertVisible: Home
+- assertVisible: Storage
+- takeScreenshot:
+    path: smoke-home
+    label: Capture Home evidence screenshot
