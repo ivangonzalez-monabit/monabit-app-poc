@@ -1,0 +1,12 @@
+steps:
+  - echo: Smoke — launch and Home
+  - launch:
+      ios: com.ivangonzalez-monabit.monabit
+      android: com.ivangonzalezmonabit.monabit
+  - await: { visible: { text: Foundation }, timeout: 20000 }
+  - await: { idle: true, timeout: 9000 }
+  - assert: { visible: { text: Foundation } }
+  - assert: { visible: { text: "Ver guía de marca" } }
+  - assert: { visible: { text: Biometría } }
+  - tool: screenshot
+    args: { includeImageInContext: false }

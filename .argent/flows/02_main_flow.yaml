@@ -1,0 +1,43 @@
+steps:
+  - echo: Main — brand guide and Secure Storage
+  - launch:
+      ios: com.ivangonzalez-monabit.monabit
+      android: com.ivangonzalezmonabit.monabit
+  - await: { visible: { text: Foundation }, timeout: 20000 }
+  - await: { idle: true, timeout: 9000 }
+  - tap: { text: "Ver guía de marca" }
+  - await: { visible: { text: Colores }, timeout: 10000 }
+  - await: { idle: true, timeout: 9000 }
+  - assert: { visible: { text: Colores } }
+  - tool: screenshot
+    args: { includeImageInContext: false }
+  - tool: gesture-swipe
+    args:
+      fromX: 0.02
+      fromY: 0.52
+      toX: 0.78
+      toY: 0.52
+      durationMs: 450
+      settle: true
+  - await: { visible: { text: Foundation }, timeout: 10000 }
+  - await: { idle: true, timeout: 9000 }
+  - scroll-to: { target: { text: "Secure Storage" }, direction: down }
+  - tap: { text: "Secure Storage" }
+  - await: { visible: { text: "Guardar token de prueba" }, timeout: 10000 }
+  - await: { idle: true, timeout: 9000 }
+  - echo: Token field — tap by coordinates (role=AXTextField uses a local UIView frame and hits the status bar)
+  - tool: gesture-tap
+    args: { x: 0.5, y: 0.26 }
+  - wait: 800
+  - tool: keyboard
+    args: { text: argent-e2e-token, delayMs: 60 }
+  - wait: 500
+  - tool: screenshot
+    args: { includeImageInContext: false }
+  - tap: { text: "Guardar token de prueba" }
+  - await: { visible: { text: "Token de prueba guardado" }, timeout: 15000 }
+  - tap: { text: "Leer token" }
+  - wait: 800
+  - await: { visible: { text: argent-e2e-token }, timeout: 8000 }
+  - tool: screenshot
+    args: { includeImageInContext: false }
