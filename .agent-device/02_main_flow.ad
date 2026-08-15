@@ -1,0 +1,22 @@
+context platform=ios
+context timeout=180000
+env APP_ID=com.ivangonzalez-monabit.monabit
+
+open ${APP_ID} --relaunch
+wait 2000
+wait text "Foundation"
+press "role=\"button\" label=\"Ver guía de marca\""
+wait text "Colores"
+is visible "role=\"statictext\" label=\"Colores\""
+screenshot "${AD_ARTIFACTS:-agent-device-reports}/main-brand-guide.png"
+press "role=\"button\" label=\"Home\""
+wait text "Foundation"
+press "role=\"button\" label=\"Storage\""
+wait text "Guardar token de prueba"
+fill "role=\"textfield\"" "agent-e2e-token"
+press "label=\"Guardar token de prueba\""
+wait text "Token de prueba guardado"
+press "label=\"Leer token\""
+wait text "agent-e2e-token"
+screenshot "${AD_ARTIFACTS:-agent-device-reports}/main-secure-storage.png"
+close

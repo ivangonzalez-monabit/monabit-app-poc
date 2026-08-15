@@ -41,3 +41,10 @@ example
 # generated native folders
 /ios
 /android
+
+# agent-device E2E artifacts
+agent-device-reports/
+.agent-device/test-artifacts/
+smoke-home.png
+main-brand-guide.png
+main-secure-storage.png

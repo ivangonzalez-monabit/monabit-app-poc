@@ -1,0 +1,14 @@
+context platform=ios
+context timeout=120000
+env APP_ID=com.ivangonzalez-monabit.monabit
+
+open ${APP_ID} --relaunch
+wait 2000
+wait text "Foundation"
+is visible "role=\"statictext\" label=\"Foundation\""
+is visible "role=\"button\" label=\"Ver guía de marca\""
+is visible "role=\"button\" label=\"Biometría\""
+is visible "role=\"button\" label=\"Home\""
+is visible "role=\"button\" label=\"Storage\""
+screenshot "${AD_ARTIFACTS:-agent-device-reports}/smoke-home.png"
+close
