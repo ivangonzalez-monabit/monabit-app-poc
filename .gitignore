@@ -42,7 +42,7 @@ example
 /ios
 /android
 
-# Argent E2E artifacts
-argent-reports/
+# E2E run artifacts, segmented by framework (e2e-reports/<framework>/)
+e2e-reports/
 .argent/recordings/
 .argent/flows/__baselines__/

@@ -57,12 +57,12 @@ npx argent flow run .argent/flows/01_smoke.yaml \
   --platform ios \
   --device "<UDID>" \
   --json \
-  --output argent-reports/manual
+  --output e2e-reports/argent/manual
 ```
 
 `npm run test:e2e:argent` crea una carpeta por corrida con hora local (`YYYY-MM-DDTHH-mm-ss`). `:record` llama `screen-recording-start` / `stop` alrededor de cada flujo.
 
-## Reportes (`./argent-reports/<fecha>/`)
+## Reportes (`./e2e-reports/argent/<fecha>/`)
 
 | Ruta | Contenido |
 | --- | --- |
@@ -75,4 +75,4 @@ npx argent flow run .argent/flows/01_smoke.yaml \
 
 Si una prueba falla, mira `summary.json` → `report.json` (primer paso `fail`/`error`) → screenshot/video.
 
-Los artefactos no se trackean en git (`argent-reports/`).
+Los artefactos no se trackean en git (`e2e-reports/argent/`).

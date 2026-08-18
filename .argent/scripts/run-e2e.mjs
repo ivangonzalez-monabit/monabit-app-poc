@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Runs Argent YAML flows and writes artifacts under
- * ./argent-reports/<YYYY-MM-DDTHH-mm-ss>/.
+ * ./e2e-reports/argent/<YYYY-MM-DDTHH-mm-ss>/.
  *
  * Env:
  *   APP_ID             Bundle id / package (highest priority; applied to both platforms)
@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const FLOWS_DIR = path.join(ROOT, '.argent', 'flows');
-const REPORTS_ROOT = path.join(ROOT, 'argent-reports');
+const REPORTS_ROOT = path.join(ROOT, 'e2e-reports', 'argent');
 const BIN = path.join(ROOT, 'node_modules', '.bin', 'argent');
 
 const DEFAULT_ANDROID_APP_ID = 'com.ivangonzalezmonabit.monabit';
