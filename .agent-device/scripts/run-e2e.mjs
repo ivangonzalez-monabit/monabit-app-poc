@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Runs agent-device .ad flows and writes artifacts under
- * ./agent-device-reports/<YYYY-MM-DDTHH-mm-ss>/.
+ * ./e2e-reports/agent-device/<YYYY-MM-DDTHH-mm-ss>/.
  *
  * Env:
  *   APP_ID           Bundle id / package (highest priority)
@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const FLOWS_DIR = path.join(ROOT, '.agent-device');
-const REPORTS_ROOT = path.join(ROOT, 'agent-device-reports');
+const REPORTS_ROOT = path.join(ROOT, 'e2e-reports', 'agent-device');
 const BIN = path.join(ROOT, 'node_modules', '.bin', 'agent-device');
 
 function runFolderName(date = new Date()) {
@@ -105,7 +105,7 @@ function main() {
   const result = spawnSync(BIN, args, {
     cwd: ROOT,
     stdio: 'inherit',
-    env: process.env,
+    env: { ...process.env, AD_ARTIFACTS: reportsDir },
   });
 
   console.log(`JUnit report: ${path.relative(ROOT, junitPath)}`);

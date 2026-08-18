@@ -61,23 +61,23 @@ CLI directo:
 npx agent-device test .agent-device \
   --platform ios \
   --device "iPhone 17" \
-  --artifacts-dir agent-device-reports/2026-08-14T19-49-12 \
+  --artifacts-dir e2e-reports/agent-device/2026-08-14T19-49-12 \
   --reporter default \
-  --reporter junit:agent-device-reports/2026-08-14T19-49-12/junit.xml \
+  --reporter junit:e2e-reports/agent-device/2026-08-14T19-49-12/junit.xml \
   -e APP_ID=com.bancounion.app \
   --record-video
 ```
 
 `npm run test:e2e:ad` crea una carpeta por corrida con hora local (`YYYY-MM-DDTHH-mm-ss`). `--record-video` escribe `recording.mp4` **en cada intento** ahí.
 
-## Reportes (`./agent-device-reports/<fecha>/`)
+## Reportes (`./e2e-reports/agent-device/<fecha>/`)
 
 | Ruta | Contenido |
 | --- | --- |
 | `junit.xml` | Suite JUnit (duración, pass/fail). |
 | `<flow>/…/recording.mp4` | Video si usaste `:record`. |
 | `…/replay.ad`, `result.txt`, `replay-timing.ndjson` | Plan ejecutado y timings. |
-| Screenshots (`smoke-home.png`, etc.) | Pedidos en el `.ad`; caen en el dir de artifacts del intento (o `agent-device-reports/` si corres `replay` a mano). |
+| Screenshots (`smoke-home.png`, etc.) | Pedidos en el `.ad`; caen en el dir de artifacts del intento (o `e2e-reports/agent-device/` si corres `replay` a mano). |
 | En fallo | `REPLAY_DIVERGENCE`: paso, línea, snapshot y sugerencias de selector. |
 
 Opcional: los YAML de Maestro se pueden lanzar con `agent-device replay flow.yaml --maestro` (subconjunto; `startRecording` de Maestro no aplica — usa `--record-video`).

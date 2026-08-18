@@ -10,5 +10,5 @@ is visible "role=\"button\" label=\"Ver guía de marca\""
 is visible "role=\"button\" label=\"Biometría\""
 is visible "role=\"button\" label=\"Home\""
 is visible "role=\"button\" label=\"Storage\""
-screenshot "${AD_ARTIFACTS:-agent-device-reports}/smoke-home.png"
+screenshot "${AD_ARTIFACTS:-e2e-reports/agent-device}/smoke-home.png"
 close

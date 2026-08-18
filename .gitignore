@@ -42,8 +42,8 @@ example
 /ios
 /android
 
-# agent-device E2E artifacts
-agent-device-reports/
+# E2E run artifacts, segmented by framework (e2e-reports/<framework>/)
+e2e-reports/
 .agent-device/test-artifacts/
 smoke-home.png
 main-brand-guide.png
