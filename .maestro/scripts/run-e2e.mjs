@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Runs Maestro E2E flows and writes CI-ready artifacts under ./maestro-reports.
+ * Runs Maestro E2E flows and writes CI-ready artifacts under ./e2e-reports/maestro.
  *
  * Env:
  *   APP_ID           Override bundle id / application id (highest priority)
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const FLOWS_DIR = path.join(ROOT, '.maestro');
-const REPORTS_DIR = path.join(ROOT, 'maestro-reports');
+const REPORTS_DIR = path.join(ROOT, 'e2e-reports', 'maestro');
 const VIDEOS_DIR = path.join(REPORTS_DIR, 'videos');
 const DEBUG_DIR = path.join(REPORTS_DIR, 'debug');
 const JUNIT_PATH = path.join(REPORTS_DIR, 'junit.xml');

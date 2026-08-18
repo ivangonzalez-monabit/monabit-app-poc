@@ -1,6 +1,6 @@
 # Pruebas E2E con Maestro (PoC)
 
-Esta carpeta contiene los flujos Maestro de la prueba de concepto. Ejecutan la app en un emulador/simulador, capturan evidencias (screenshots y video) y escriben reportes estructurados en `./maestro-reports/`.
+Esta carpeta contiene los flujos Maestro de la prueba de concepto. Ejecutan la app en un emulador/simulador, capturan evidencias (screenshots y video) y escriben reportes estructurados en `./e2e-reports/maestro/`.
 
 ## Identificadores de la app
 
@@ -89,16 +89,16 @@ Si solo hay un simulador iOS booteado, a veces basta `--platform ios` sin UDID. 
 maestro test .maestro \
   --config .maestro/config.yaml \
   --format junit \
-  --output maestro-reports/junit.xml \
-  --test-output-dir maestro-reports \
-  --debug-output maestro-reports/debug \
+  --output e2e-reports/maestro/junit.xml \
+  --test-output-dir e2e-reports/maestro \
+  --debug-output e2e-reports/maestro/debug \
   -e APP_ID=com.ivangonzalezmonabit.monabit \
   -e RECORD_VIDEO=false
 ```
 
 En un fallo, Maestro guarda automáticamente screenshot y jerarquía de vista del paso que falló (no hace falta un `takeScreenshot` extra).
 
-## Reportes y evidencias (`./maestro-reports/`)
+## Reportes y evidencias (`./e2e-reports/maestro/`)
 
 | Ruta | Contenido |
 | --- | --- |
@@ -120,4 +120,4 @@ Tras un `maestro test ... -e RECORD_VIDEO=true` a mano:
 npm run test:e2e:maestro:collect-videos
 ```
 
-Eso copia los `.mp4` a `maestro-reports/videos/`.
+Eso copia los `.mp4` a `e2e-reports/maestro/videos/`.

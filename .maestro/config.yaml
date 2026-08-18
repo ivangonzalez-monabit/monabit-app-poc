@@ -7,7 +7,7 @@
 flows:
   - '*.yaml'
 
-testOutputDir: maestro-reports
+testOutputDir: e2e-reports/maestro
 
 executionOrder:
   continueOnFailure: true

@@ -36,8 +36,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# Maestro E2E artifacts
-maestro-reports/
+# E2E run artifacts, segmented by framework (e2e-reports/<framework>/)
+e2e-reports/
 
 example
 
