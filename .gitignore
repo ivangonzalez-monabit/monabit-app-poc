@@ -36,9 +36,6 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# E2E run artifacts, segmented by framework (e2e-reports/<framework>/)
-e2e-reports/
-
 example
 
 # generated native folders
